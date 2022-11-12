@@ -46,6 +46,7 @@ public class EmployeeController {
 	}
 	
 	
+	@SuppressWarnings("deprecation")
 	@GetMapping("/v1/getTaxDetails/{empId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseEntity<EmployeeDTO> getTaxDetails(@PathVariable String empId) throws ParseException {
@@ -60,14 +61,19 @@ public class EmployeeController {
 		float salary = emp.getSalary()*12;
 		
 		employeeDTO.setYearlySalary((int) salary);
-		Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(emp.getDateOfJoining());  
-		 int daysLateJoined = daysBetween(date1, new Date());
-		if(daysLateJoined > 0) {
-			float salaryInDay = salary/30;
-			int dayToBeDeducted = 365 - daysLateJoined;
-			salary = salaryInDay * dayToBeDeducted;
-			employeeDTO.setYearlySalary((int) salary);
-		}
+		Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(emp.getDateOfJoining());
+		 int getYear= date1.getYear();
+		 String yearApril = "01/04"+"/"+String.valueOf(getYear);
+		 Date date2 = new SimpleDateFormat("dd/MM/yyyy").parse(yearApril);
+			if (getYear == new Date().getYear()) {
+				int daysLateJoined = daysBetween(date1, date2);
+				if (daysLateJoined > 0) {
+					float salaryInDay = salary / 30;
+					int dayToBeDeducted = 365 - daysLateJoined;
+					salary = salaryInDay * dayToBeDeducted;
+					employeeDTO.setYearlySalary((int) salary);
+				}
+			}
 		
 		if(salary <= 250000) {
 			employeeDTO.setTaxAmount(0);
