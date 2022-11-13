@@ -88,7 +88,7 @@ public class EmployeeController {
 		}
 		
 		if (salary * 12 > 2500000) {
-			int cess = (int) ((salary - 2500000) * 3 / 100);
+			int cess = ((employeeDTO.getYearlySalary() - 2500000) * 2 / 100);
 			employeeDTO.setCessAmount(cess);
 		}
 		
