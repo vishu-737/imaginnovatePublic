@@ -35,12 +35,7 @@ public class EmployeeTable {
 	private String dateOfJoining;
 	@Column(name = "salary")
 	private float salary;
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
+	
 	public String getEmployeeID() {
 		return employeeID;
 	}
@@ -82,6 +77,12 @@ public class EmployeeTable {
 	}
 	public void setSalary(float salary) {
 		this.salary = salary;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	

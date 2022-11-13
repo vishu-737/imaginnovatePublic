@@ -51,7 +51,7 @@ public class EmployeeTacCalClass implements EmployeeTaxCal{
 	@Override
 	public EmployeeTable getByEmpId(String empId) {
 		if(empId!=null) {
-			return  (EmployeeTable)emplRepo.findByEmployeeID(empId);
+			return emplRepo.findByEmployeeID(empId);
 		}
 		return null;
 	}
