@@ -8,9 +8,9 @@ import java.lang.String;
 import java.util.List;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<EmployeeTable, String> {
+public interface EmployeeRepository extends JpaRepository<EmployeeTable, Integer> {
 
 
-   List<EmployeeTable> findByEmployeeID(String employeeid);
+   EmployeeTable findByEmployeeID(String employeeid);
 	
 }

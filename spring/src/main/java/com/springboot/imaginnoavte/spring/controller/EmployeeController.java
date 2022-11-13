@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.imaginnoavte.spring.employeeDTO.Employee;
@@ -48,8 +49,9 @@ public class EmployeeController {
 	
 	@SuppressWarnings("deprecation")
 	@GetMapping("/v1/getTaxDetails/{empId}")
+	@ResponseBody
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseEntity<EmployeeDTO> getTaxDetails(@PathVariable String empId) throws ParseException {
+	public ResponseEntity<EmployeeDTO> getTaxDetails(@PathVariable ("empId") String empId) throws ParseException {
 		EmployeeDTO employeeDTO = new EmployeeDTO();
 		if(empId!=null) {
 			EmployeeTable emp = employeeTaxCal.getByEmpId(empId);
@@ -62,10 +64,13 @@ public class EmployeeController {
 		
 		employeeDTO.setYearlySalary((int) salary);
 		Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(emp.getDateOfJoining());
-		 int getYear= date1.getYear();
+		
+		int getYear = getYears(date1);
+			
 		 String yearApril = "01/04"+"/"+String.valueOf(getYear);
 		 Date date2 = new SimpleDateFormat("dd/MM/yyyy").parse(yearApril);
-			if (getYear == new Date().getYear()) {
+		
+			if (getYear == getYears(date2) && date1.compareTo(date2)<0) {
 				int daysLateJoined = daysBetween(date1, date2);
 				if (daysLateJoined > 0) {
 					float salaryInDay = salary / 30;
@@ -125,6 +130,12 @@ public class EmployeeController {
 		c.set(Calendar.MILLISECOND, 0);
 
 		return c.getTime();
+	}
+	
+	private int getYears(Date date) {
+		Calendar calender = Calendar.getInstance();
+		calender.setTime(date);
+		return calender.get(Calendar.YEAR);
 	}
 	
 }
