@@ -70,7 +70,7 @@ public class EmployeeController {
 		 String yearApril = "01/04"+"/"+String.valueOf(getYear);
 		 Date date2 = new SimpleDateFormat("dd/MM/yyyy").parse(yearApril);
 		
-			if (getYear == getYears(date2) && date1.compareTo(date2)<0) {
+			if (getYear == getYears(date2) && date2.compareTo(date1)<0) {
 				int daysLateJoined = daysBetween(date1, date2);
 				if (daysLateJoined > 0) {
 					float salaryInDay = salary / 30;

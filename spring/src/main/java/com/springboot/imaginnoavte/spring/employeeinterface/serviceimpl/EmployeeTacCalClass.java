@@ -18,10 +18,10 @@ public class EmployeeTacCalClass implements EmployeeTaxCal{
 	@Override
 	public int taxToBePaid(float salary) {
 		int taxPaid = 0;
-		if (salary > 250000 && salary <= 500000) {
+		if (salary > 250000 ) {
 			taxPaid = (taxPaid + (250000 * 5 / 100));
 		}
-		if (salary > 500000 && salary <= 1000000) {
+		if (salary > 500000) {
 			taxPaid = (taxPaid + (500000 * 10 / 100));
 		}
 		if (salary > 1000000) {
