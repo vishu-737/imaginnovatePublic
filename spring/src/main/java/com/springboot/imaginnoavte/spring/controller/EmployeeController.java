@@ -25,52 +25,45 @@ import com.springboot.imaginnoavte.spring.employeeDTO.EmployeeDTO;
 import com.springboot.imaginnoavte.spring.employeeDTO.EmployeeTable;
 import com.springboot.imaginnoavte.spring.employeeinterface.EmployeeTaxCal;
 
-
-
-
 @RestController
 @RequestMapping("/api/imaginnovate")
 public class EmployeeController {
-	
+
 	@Autowired
 	private EmployeeTaxCal employeeTaxCal;
-	
-	
-	
+
 	@PostMapping("/saveEmployeeDetails")
-	public String saveEmployeeDetails(@Valid @RequestBody Employee employee){
+	public String saveEmployeeDetails(@Valid @RequestBody Employee employee) {
 		Employee empl = employeeTaxCal.save(employee);
-		if(empl!=null) {
+		if (empl != null) {
 			return empl.getEmployeeID();
 		}
 		return null;
 	}
-	
-	
+
 	@SuppressWarnings("deprecation")
 	@GetMapping("/v1/getTaxDetails/{empId}")
 	@ResponseBody
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResponseEntity<EmployeeDTO> getTaxDetails(@PathVariable ("empId") String empId) throws ParseException {
+	public ResponseEntity<EmployeeDTO> getTaxDetails(@PathVariable("empId") String empId) throws ParseException {
 		EmployeeDTO employeeDTO = new EmployeeDTO();
-		if(empId!=null) {
+		if (empId != null) {
 			EmployeeTable emp = employeeTaxCal.getByEmpId(empId);
-		
-		employeeDTO.setEmployeeID(emp.getEmployeeID());
-		employeeDTO.setFirstName(emp.getFirstName());
-		employeeDTO.setLastName(emp.getLastName());
-		
-		float salary = emp.getSalary();
-		
-		
-		Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(emp.getDateOfJoining());
-		
-		int getYear = getYears(date1);
-			
-		 String yearApril = "01/04"+"/"+String.valueOf(getYear);
-		 Date date2 = new SimpleDateFormat("dd/MM/yyyy").parse(yearApril);
-		
-			if (getYear == getYears(date2) && date2.compareTo(date1)<0) {
+
+			employeeDTO.setEmployeeID(emp.getEmployeeID());
+			employeeDTO.setFirstName(emp.getFirstName());
+			employeeDTO.setLastName(emp.getLastName());
+
+			float salary = emp.getSalary();
+
+			Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(emp.getDateOfJoining());
+
+			int getYear = getYears(date1);
+
+			String yearApril = "01/04" + "/" + String.valueOf(getYear);
+			Date date2 = new SimpleDateFormat("dd/MM/yyyy").parse(yearApril);
+
+			if (getYear == getYears(date2) && date2.compareTo(date1) < 0) {
 				int daysLateJoined = daysBetween(date1, date2);
 				if (daysLateJoined > 0) {
 					float salaryInDay = salary / 30;
@@ -78,28 +71,27 @@ public class EmployeeController {
 					salary = salaryInDay * dayToBeDeducted;
 					employeeDTO.setYearlySalary((int) salary);
 				}
-			}else {
-			salary = salary *12;
-			employeeDTO.setYearlySalary((int) salary);
+			} else {
+				salary = salary * 12;
+				employeeDTO.setYearlySalary((int) salary);
 			}
-		if(salary <= 250000) {
-			employeeDTO.setTaxAmount(0);
-		}else {
-		int taxPaid = employeeTaxCal.taxToBePaid(salary);
-		employeeDTO.setTaxAmount(taxPaid);
+			if (salary <= 250000) {
+				employeeDTO.setTaxAmount(0);
+			} else {
+				int taxPaid = employeeTaxCal.taxToBePaid(salary);
+				employeeDTO.setTaxAmount(taxPaid);
+			}
+
+			if (employeeDTO.getYearlySalary() > 2500000) {
+				int cess = ((employeeDTO.getYearlySalary() - 2500000) * 2 / 100);
+				employeeDTO.setCessAmount(cess);
+			}
+
+			return new ResponseEntity<>(employeeDTO, HttpStatus.OK);
 		}
-		
-		if (employeeDTO.getYearlySalary() > 2500000) {
-			int cess = ((employeeDTO.getYearlySalary() - 2500000) * 2 / 100);
-			employeeDTO.setCessAmount(cess);
-		}
-		
-		return new ResponseEntity<>(employeeDTO,HttpStatus.OK);
-		}
-		return new ResponseEntity<>(employeeDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(employeeDTO, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
-	
+
 	private int daysBetween(Date d1, Date d2) {
 		int difference = 0;
 
@@ -122,7 +114,7 @@ public class EmployeeController {
 		}
 		return difference;
 	}
-	
+
 	private Date nullifyTime(Date a) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(a);
@@ -133,11 +125,11 @@ public class EmployeeController {
 
 		return c.getTime();
 	}
-	
+
 	private int getYears(Date date) {
 		Calendar calender = Calendar.getInstance();
 		calender.setTime(date);
 		return calender.get(Calendar.YEAR);
 	}
-	
+
 }
