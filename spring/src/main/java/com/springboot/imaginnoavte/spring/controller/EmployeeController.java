@@ -60,9 +60,9 @@ public class EmployeeController {
 		employeeDTO.setFirstName(emp.getFirstName());
 		employeeDTO.setLastName(emp.getLastName());
 		
-		float salary = emp.getSalary()*12;
+		float salary = emp.getSalary();
 		
-		employeeDTO.setYearlySalary((int) salary);
+		
 		Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(emp.getDateOfJoining());
 		
 		int getYear = getYears(date1);
@@ -78,8 +78,10 @@ public class EmployeeController {
 					salary = salaryInDay * dayToBeDeducted;
 					employeeDTO.setYearlySalary((int) salary);
 				}
+			}else {
+			salary = salary *12;
+			employeeDTO.setYearlySalary((int) salary);
 			}
-		
 		if(salary <= 250000) {
 			employeeDTO.setTaxAmount(0);
 		}else {
@@ -87,7 +89,7 @@ public class EmployeeController {
 		employeeDTO.setTaxAmount(taxPaid);
 		}
 		
-		if (salary * 12 > 2500000) {
+		if (employeeDTO.getYearlySalary() > 2500000) {
 			int cess = ((employeeDTO.getYearlySalary() - 2500000) * 2 / 100);
 			employeeDTO.setCessAmount(cess);
 		}

@@ -23,10 +23,9 @@ public class EmployeeTacCalClass implements EmployeeTaxCal{
 		}
 		if (salary > 500000) {
 			taxPaid = (taxPaid + (500000 * 10 / 100));
-			
 		}
 		if (salary > 1000000) {
-			taxPaid =  (taxPaid + (1000000 * 15 / 100));
+			taxPaid = (taxPaid + (1000000 * 15 / 100));
 		}
 		return taxPaid;
 	}
