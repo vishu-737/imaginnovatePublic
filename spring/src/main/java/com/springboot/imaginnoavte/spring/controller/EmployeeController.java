@@ -41,7 +41,6 @@ public class EmployeeController {
 		return null;
 	}
 
-	@SuppressWarnings("deprecation")
 	@GetMapping("/v1/getTaxDetails/{empId}")
 	@ResponseBody
 	@Produces(MediaType.APPLICATION_JSON)
@@ -49,20 +48,14 @@ public class EmployeeController {
 		EmployeeDTO employeeDTO = new EmployeeDTO();
 		if (empId != null) {
 			EmployeeTable emp = employeeTaxCal.getByEmpId(empId);
-
 			employeeDTO.setEmployeeID(emp.getEmployeeID());
 			employeeDTO.setFirstName(emp.getFirstName());
 			employeeDTO.setLastName(emp.getLastName());
-
 			float salary = emp.getSalary();
-
 			Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(emp.getDateOfJoining());
-
 			int getYear = getYears(date1);
-
 			String yearApril = "01/04" + "/" + String.valueOf(getYear);
 			Date date2 = new SimpleDateFormat("dd/MM/yyyy").parse(yearApril);
-
 			if (getYear == getYears(date2) && date2.compareTo(date1) < 0) {
 				int daysLateJoined = daysBetween(date1, date2);
 				if (daysLateJoined > 0) {
@@ -81,12 +74,10 @@ public class EmployeeController {
 				int taxPaid = employeeTaxCal.taxToBePaid(salary);
 				employeeDTO.setTaxAmount(taxPaid);
 			}
-
 			if (employeeDTO.getYearlySalary() > 2500000) {
 				int cess = ((employeeDTO.getYearlySalary() - 2500000) * 2 / 100);
 				employeeDTO.setCessAmount(cess);
 			}
-
 			return new ResponseEntity<>(employeeDTO, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(employeeDTO, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -94,11 +85,9 @@ public class EmployeeController {
 
 	private int daysBetween(Date d1, Date d2) {
 		int difference = 0;
-
 		if (d1 != null && d2 != null) {
 			Calendar earlier = Calendar.getInstance();
 			Calendar later = Calendar.getInstance();
-
 			if (d1.compareTo(d2) < 0) {
 				earlier.setTime(nullifyTime(d1));
 				later.setTime(nullifyTime(d2));
@@ -106,7 +95,6 @@ public class EmployeeController {
 				earlier.setTime(nullifyTime(d2));
 				later.setTime(nullifyTime(d1));
 			}
-
 			while (earlier.before(later)) {
 				earlier.add(Calendar.DAY_OF_MONTH, 1);
 				difference++;
@@ -122,7 +110,6 @@ public class EmployeeController {
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
-
 		return c.getTime();
 	}
 

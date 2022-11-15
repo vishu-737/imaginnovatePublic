@@ -1,5 +1,7 @@
 package com.springboot.imaginnoavte.spring.employeeDTO;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,13 +11,18 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Employee_table")
-public class EmployeeTable {
+public class EmployeeTable implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2451361622623354391L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	@Column(name = "employee_id")
+	@Column(name = "employee_id" ,unique = true)
 	private String employeeID;
 	
 	@Column(name = "first_name")

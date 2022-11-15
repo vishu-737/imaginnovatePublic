@@ -32,8 +32,17 @@ public class EmployeeTacCalClass implements EmployeeTaxCal{
 
 	@Override
 	public Employee save(Employee employee) {
-		if(employee!=null) {
-			EmployeeTable employeeTable = new EmployeeTable();
+		EmployeeTable employeeTable = getByEmpId(employee.getEmployeeID());
+		if (employeeTable != null) {
+			employeeTable.setEmailId(employee.getEmailId());
+			employeeTable.setDateOfJoining(employee.getDateOfJoining());
+			employeeTable.setFirstName(employee.getFirstName());
+			employeeTable.setLastName(employee.getLastName());
+			employeeTable.setSalary(employee.getSalary());
+			employeeTable.setPhoneNo(employee.getPhoneNo());
+		}
+		else {
+			employeeTable = new EmployeeTable();
 			employeeTable.setEmployeeID(employee.getEmployeeID());
 			employeeTable.setEmailId(employee.getEmailId());
 			employeeTable.setDateOfJoining(employee.getDateOfJoining());
@@ -41,11 +50,10 @@ public class EmployeeTacCalClass implements EmployeeTaxCal{
 			employeeTable.setLastName(employee.getLastName());
 			employeeTable.setSalary(employee.getSalary());
 			employeeTable.setPhoneNo(employee.getPhoneNo());
+		}
 			emplRepo.save(employeeTable);
 			return employee;
-		}
-		return null;
-		
+	
 	}
 
 	@Override
